@@ -5,6 +5,9 @@ This is the entry point of the Toy Robot Simulator. It passes a list of commands
 """
 
 from controller import RobotController
+from logging_config import setup_logger
+
+setup_logger()
 
 if __name__ == "__main__":
     commands = [

@@ -44,7 +44,7 @@ class Robot:
         Returns: (new_x, new_y)
         """
         dx, dy = self.GET_DIRECTION_DELTAS[self.current_direction]
-        return self.current_x + dx, self.current_y + dy
+        return self.current_x + dx, self.current_y + dy, self.current_direction
     
     def update_position(self, new_x, new_y):
         """

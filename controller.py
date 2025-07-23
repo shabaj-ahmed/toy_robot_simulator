@@ -13,6 +13,7 @@ Responsibilities:
 
 from robot import Robot
 from navigation import Navigation
+import logging
 
 # Set of all supported commands
 VALID_COMMANDS = {"PLACE", "MOVE", "LEFT", "RIGHT", "REPORT"}
@@ -28,6 +29,7 @@ class RobotController:
     def __init__(self):
         self.robot = Robot()
         self.navigation = Navigation()
+        self.logger = logging.getLogger(self.__class__.__name__)
 
     def process_commands(self, commands):
         """
@@ -55,23 +57,24 @@ class RobotController:
                 _ , x, y, direction = parsed
 
                 if not self.navigation.is_valid_position(x, y):
-                    # Skip PLACE if position is invalid
+                    self.logger.warning(f"PLACE ignored: invalid position ({x},{y}{direction})")
                     continue
                 
                 self.robot.place(x, y, direction)
 
             elif not self.robot.is_placed:
-                # Ignore commands until robot is placed on table
+                self.logger.warning(f"Ignoring '{cmd}' as no PLACE command has been issued yet.")
                 continue
 
             elif cmd == "MOVE":
                 # Ask robot what the next move would be
-                new_x, new_y = self.robot.propose_move()
+                new_x, new_y, current_direction = self.robot.propose_move()
 
                 # Check if that move would be valid (on the table)
                 if self.navigation.is_valid_position(new_x, new_y):
-                    # Only update robot's state if move is safe
                     self.robot.update_position(new_x, new_y)
+                else:
+                    self.logger.warning(f"Unsafe MOVE ignored: ({new_x},{new_y}{current_direction})")
 
             elif cmd == "LEFT":
                 self.robot.turn_left()
@@ -103,6 +106,7 @@ class RobotController:
         cmd = parts[0].upper()
 
         if cmd not in VALID_COMMANDS:
+            self.logger.warning(f"Unrecognised command: '{command}'")
             return None
 
         if cmd == "PLACE":
@@ -113,14 +117,13 @@ class RobotController:
                 x_str, y_str, direction = parts[1].split(",")
                 x, y = int(x_str), int(y_str) # Throws ValueError if not integers
                 direction = direction.strip().upper()
-                if direction not in Robot.GET_CARDINAL_DIRECTIONS:
-                    return None
                 
                 if direction not in Robot.GET_CARDINAL_DIRECTIONS:
                     raise ValueError("Invalid direction.")
                     
                 return ("PLACE", x, y, direction)
             except (ValueError, IndexError) as e:
+                self.logger.error(f"Invalid PLACE command format: {command} - {e}")
                 return None # PLACE format is invalid
 
         # All other commands must be exactly one word
