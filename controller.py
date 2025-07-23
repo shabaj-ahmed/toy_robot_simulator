@@ -1,12 +1,21 @@
 """
 controller.py
 
-This file defines the RobotController, which processes incoming commands, 
-delegates state updates to the Robot, and uses Navigation to validate movement.
+This file defines the RobotController class, which serves as the main interface 
+for processing user commands. It delegates robot control (position and direction) 
+to the Robot class, and validates movements using the Navigation class.
+
+Responsibilities:
+- Parse and validate incoming commands
+- Coordinate execution of valid commands
+- Enforce safety (e.g., prevent moving off the table)
 """
 
 from robot import Robot
 from navigation import Navigation
+
+# Set of all supported commands
+VALID_COMMANDS = {"PLACE", "MOVE", "LEFT", "RIGHT", "REPORT"}
 
 class RobotController:
     """
@@ -22,37 +31,100 @@ class RobotController:
 
     def process_commands(self, commands):
         """
-        Process a list of string commands and apply them in order.
-        Commands: PLACE, MOVE, LEFT, RIGHT, REPORT
+        Processes a sequence of string commands in order.
+
+        Parameters:
+        - commands: list of strings, e.g., ["PLACE 1,2,EAST", "MOVE", "REPORT"]
+
+        For each command:
+        - It is parsed and validated
+        - If valid, it's executed based on robot state
+        - Commands are ignored if they are invalid or unsafe
         """
 
         for command in commands:
-            command = command.strip()
-            parts = command.split()
+            parsed = self.parse_command(command)
+            if not parsed:
+                # Skip invalid commands
+                continue
 
-            if parts[0] == "PLACE" and len(parts) == 2:
-                x_str, y_str, direction = parts[1].split(",")
-                x, y = int(x_str), int(y_str)
-                direction = direction.strip().upper()
-                if self.navigation.is_valid_position(x, y) and direction in Robot.GET_CARDINAL_DIRECTIONS:
-                    self.robot.place(x, y, direction)
+            cmd = parsed[0]
+
+            if cmd == "PLACE":
+                # Unpack arguments only if cmd is PLACE
+                _ , x, y, direction = parsed
+
+                if not self.navigation.is_valid_position(x, y):
+                    # Skip PLACE if position is invalid
+                    continue
+                
+                self.robot.place(x, y, direction)
 
             elif not self.robot.is_placed:
-                continue # Ignore commands until robot is placed
+                # Ignore commands until robot is placed on table
+                continue
 
-            elif command == "MOVE":
+            elif cmd == "MOVE":
+                # Ask robot what the next move would be
                 new_x, new_y = self.robot.propose_move()
+
+                # Check if that move would be valid (on the table)
                 if self.navigation.is_valid_position(new_x, new_y):
+                    # Only update robot's state if move is safe
                     self.robot.update_position(new_x, new_y)
 
-            elif command == "LEFT":
+            elif cmd == "LEFT":
                 self.robot.turn_left()
 
-            elif command == "RIGHT":
+            elif cmd == "RIGHT":
                 self.robot.turn_right()
 
-            elif command == "REPORT":
+            elif cmd == "REPORT":
                 self.robot.report()
 
-    def is_valid_command(self, command):
-        pass
+    def parse_command(self, command: str):
+        """
+        Parses and validates a single command string.
+
+        Parameters:
+        - command (str): The raw input command
+
+        Returns:
+        - tuple representing parsed command:
+            - ("PLACE", x, y, direction) if valid PLACE
+            - ("MOVE",) or ("LEFT",) or ("RIGHT",) for other commands
+            - None if the command is invalid or malformed
+        """
+        parts = command.strip().split()
+
+        if not parts: # Empty command
+            return None
+
+        cmd = parts[0].upper()
+
+        if cmd not in VALID_COMMANDS:
+            return None
+
+        if cmd == "PLACE":
+            # PLACE must have exactly one argument: "X,Y,DIRECTION"
+            if len(parts) != 2:
+                return None
+            try:
+                x_str, y_str, direction = parts[1].split(",")
+                x, y = int(x_str), int(y_str) # Throws ValueError if not integers
+                direction = direction.strip().upper()
+                if direction not in Robot.GET_CARDINAL_DIRECTIONS:
+                    return None
+                
+                if direction not in Robot.GET_CARDINAL_DIRECTIONS:
+                    raise ValueError("Invalid direction.")
+                    
+                return ("PLACE", x, y, direction)
+            except (ValueError, IndexError) as e:
+                return None # PLACE format is invalid
+
+        # All other commands must be exactly one word
+        if len(parts) == 1:
+            return (cmd,)
+
+        return None # Invalid command format
