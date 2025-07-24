@@ -1,47 +1,80 @@
+"""
+test_controller.py
+
+Unit tests for the RobotController class, which parses and validates user commands,
+coordinates robot actions, and ensures safety logic is enforced (e.g., ignoring invalid or unsafe commands).
+"""
+
 import pytest
 from toy_robot.controller import RobotController
 
-def test_ignore_invalid_commands(caplog):
-    controller = RobotController()
-    for cmd in ["JUMP", "FLY", "PLACE2,3,EAST"]:
-        controller.process_command(cmd)
-    assert "Unrecognised command" in caplog.text
+class TestCommandValidation:
+    def test_ignores_completely_invalid_commands(self, caplog):
+        """
+        Commands that are unrecognised or malformed should be ignored and logged as warnings.
+        """
+        controller = RobotController()
+        invalid_cmds = ["JUMP", "FLY", "PLACE2,3,EAST"]
+        for cmd in invalid_cmds:
+            controller.process_command(cmd)
+        assert "Unrecognised command" in caplog.text
 
-def test_invalid_place_command_format(caplog):
-    controller = RobotController()
-    for cmd in ["PLACE 1,A,EAST", "RIGHT", "MOVE"]:
-        controller.process_command(cmd)
-    assert "Invalid PLACE command format: PLACE 1,A,EAST - invalid literal for int() with base 10: 'A'" in caplog.text
+    def test_rejects_invalid_place_format_and_logs_error(self, caplog):
+        """
+        PLACE commands with invalid format (e.g., non-integer or missing fields) should trigger errors.
+        """
+        controller = RobotController()
+        controller.process_command("PLACE 1,A,EAST")
+        assert "Invalid PLACE command format: PLACE 1,A,EAST - invalid literal for int() with base 10: 'A'" in caplog.text
 
-def test_case_insensitive_command_is_ignored():
-    controller = RobotController()
-    controller.process_command("place 0,0,NORTH")
-    assert not controller.robot.is_placed
+    def test_rejects_case_insensitive_command_keyword(self):
+        """
+        Commands must be uppercase — lowercase or mixed case commands are ignored.
+        """
+        controller = RobotController()
+        controller.process_command("place 0,0,NORTH")
+        assert not controller.robot.is_placed
 
-def test_case_insensitive_direction_is_ignored():
-    controller = RobotController()
-    controller.process_command("PLACE 0,0,north")
-    assert not controller.robot.is_placed
+    def test_rejects_case_insensitive_direction(self):
+        """
+        PLACE commands with lowercase direction are considered invalid.
+        """
+        controller = RobotController()
+        controller.process_command("PLACE 0,0,north")
+        assert not controller.robot.is_placed
 
-def test_valid_place_command(caplog):
-    controller = RobotController()
-    controller.process_command("PLACE 5,6,EAST")
-    assert "PLACE ignored: invalid position (5,6,EAST)" in caplog.text
+    def test_ignores_place_command_out_of_bounds(self, caplog):
+        """
+        PLACE commands with out-of-bound coordinates are ignored and logged.
+        """
+        controller = RobotController()
+        controller.process_command("PLACE 5,6,EAST")
+        assert "PLACE ignored: invalid position (5,6,EAST)" in caplog.text
 
-def test_place_and_report(monkeypatch, capsys):
-    controller = RobotController()
-    for cmd in ["PLACE 1,2,EAST", "REPORT"]:
-        controller.process_command(cmd)
-    captured = capsys.readouterr()
-    assert "1,2,EAST" in captured.out
+class TestCommandExecution:
+    def test_place_and_report_outputs_position(self, capsys):
+        """
+        After a valid PLACE command, REPORT should output the correct position and direction.
+        """
+        controller = RobotController()
+        controller.process_command("PLACE 1,2,EAST")
+        controller.process_command("REPORT")
+        out = capsys.readouterr().out
+        assert out.strip() == "1,2,EAST"
 
-def test_prevent_move_off_table(caplog):
-    controller = RobotController()
-    for cmd in ["PLACE 0,0,SOUTH", "MOVE"]:
-        controller.process_command(cmd)
-    assert "Unsafe MOVE ignored" in caplog.text
+    def test_move_is_blocked_if_unsafe(self, caplog):
+        """
+        A MOVE that would push the robot off the grid should be ignored and logged.
+        """
+        controller = RobotController()
+        controller.process_command("PLACE 0,0,SOUTH")
+        controller.process_command("MOVE")
+        assert "Unsafe MOVE ignored" in caplog.text
 
-def test_ignore_move_before_place(caplog):
-    controller = RobotController()
-    controller.process_command("MOVE")
-    assert "Ignoring 'MOVE' as no PLACE command has been issued yet." in caplog.text
+    def test_move_is_ignored_before_valid_place(self, caplog):
+        """
+        A MOVE command issued before any valid PLACE should be ignored and logged.
+        """
+        controller = RobotController()
+        controller.process_command("MOVE")
+        assert "Ignoring 'MOVE' as no PLACE command has been issued yet." in caplog.text
