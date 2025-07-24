@@ -57,7 +57,7 @@ class RobotController:
                 _ , x, y, direction = parsed
 
                 if not self.navigation.is_valid_position(x, y):
-                    self.logger.warning(f"PLACE ignored: invalid position ({x},{y}{direction})")
+                    self.logger.warning(f"PLACE ignored: invalid position ({x},{y},{direction})")
                     continue
                 
                 self.robot.place(x, y, direction)
@@ -103,7 +103,7 @@ class RobotController:
         if not parts: # Empty command
             return None
 
-        cmd = parts[0].upper()
+        cmd = parts[0]
 
         if cmd not in VALID_COMMANDS:
             self.logger.warning(f"Unrecognised command: '{command}'")
@@ -116,7 +116,7 @@ class RobotController:
             try:
                 x_str, y_str, direction = parts[1].split(",")
                 x, y = int(x_str), int(y_str) # Throws ValueError if not integers
-                direction = direction.strip().upper()
+                direction = direction.strip()
                 
                 if direction not in Robot.GET_CARDINAL_DIRECTIONS:
                     raise ValueError("Invalid direction.")
