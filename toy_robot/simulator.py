@@ -3,7 +3,7 @@ class Simulator:
         self.controller = controller
 
     def run_from_default_file(self):
-        filename = "commands.txt"
+        filename = "data/commands.txt"
         try:
             with open(filename, "r") as file:
                 for line in file:
