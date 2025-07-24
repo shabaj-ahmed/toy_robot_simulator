@@ -69,4 +69,4 @@ class TestReporting:
         robot.place(1, 2, "EAST")
         robot.report()
         out, _ = capfd.readouterr()
-        assert out.strip() == "1,2,EAST"
+        assert out.strip() == "Output: 1,2,EAST"

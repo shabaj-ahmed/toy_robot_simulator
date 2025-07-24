@@ -60,7 +60,7 @@ class TestCommandExecution:
         controller.process_command("PLACE 1,2,EAST")
         controller.process_command("REPORT")
         out = capsys.readouterr().out
-        assert out.strip() == "1,2,EAST"
+        assert out.strip() == "Output: 1,2,EAST"
 
     def test_move_is_blocked_if_unsafe(self, caplog):
         """
