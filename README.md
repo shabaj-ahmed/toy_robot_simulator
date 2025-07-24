@@ -202,6 +202,7 @@ REPORT
 
 ### Expected Console Output
 ```bash
+Output: 0,0,SOUTH
 Output: 0,2,WEST
 Output: 3,3,NORTH
 ```
