@@ -11,8 +11,8 @@ Responsibilities:
 - Enforce safety (e.g., prevent moving off the table)
 """
 
-from robot import Robot
-from navigation import Navigation
+from toy_robot.robot import Robot
+from toy_robot.navigation import Navigation
 import logging
 
 # Set of all supported commands

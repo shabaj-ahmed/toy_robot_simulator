@@ -1,5 +1,5 @@
 import pytest
-from controller import RobotController
+from toy_robot.controller import RobotController
 
 def test_ignore_invalid_commands(caplog):
     controller = RobotController()

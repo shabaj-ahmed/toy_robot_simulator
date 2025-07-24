@@ -1,5 +1,5 @@
 import pytest
-from navigation import Navigation
+from toy_robot.navigation import Navigation
 
 def test_valid_position_within_bounds():
     nav = Navigation(grid_size=5)

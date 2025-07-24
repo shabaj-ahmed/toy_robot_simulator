@@ -4,7 +4,7 @@ main.py
 This is the entry point of the Toy Robot Simulator. It passes a list of commands to the controller.
 """
 
-from controller import RobotController
+from toy_robot.controller import RobotController
 from logging_config import setup_logger
 
 setup_logger()

@@ -1,5 +1,5 @@
 import pytest
-from controller import RobotController
+from toy_robot.controller import RobotController
 
 def test_standard_command_sequence(capsys):
     controller = RobotController()

@@ -1,5 +1,5 @@
 import pytest
-from robot import Robot
+from toy_robot.robot import Robot
 
 def test_place_sets_position_and_direction():
     robot = Robot()

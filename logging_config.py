@@ -2,7 +2,7 @@
 import logging
 import os
 
-def setup_logger(log_file="custom_logging/logs/robot_simulator.log", level=logging.DEBUG):
+def setup_logger(log_file="logs/robot_simulator.log", level=logging.DEBUG):
     os.makedirs(os.path.dirname(log_file), exist_ok=True)
 
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
