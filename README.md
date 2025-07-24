@@ -19,8 +19,9 @@
     - [Sample commands.txt file](#sample-commandstxt-file)
     - [Expected Console Output](#expected-console-output)
     - [Expected Log Output](#expected-log-output)
-  - [Example: Command Execution Flow](#example-command-execution-flow)
+  - [Execution Flow Explained](#execution-flow-explained)
     - [Step-by-step Flow:](#step-by-step-flow)
+  - [Future improvements.](#future-improvements)
 
 # toy_robot_simulator  
 This is a simulation of a toy robot placed on a 5×5 tabletop grid using text-based commands. The robot can be placed at specific coordinates, rotated left or right, moved forward, and asked to report its position. Commands are read from a file in plain text and are processed in order.
@@ -92,36 +93,36 @@ REPORT
 *No output* (because the initial `PLACE` was invalid — the robot is never placed on the table)
 
 ## Project Structure  
-toy_robot_simulator/
-│
-├── config/
-│ ├── __init__.py
-│ └── logging_config.py # Sets up logging format and handlers
-│
-├── data/
-│ └── commands.txt # Input file containing list of commands
-│
-├── logs/
-│ └── robot_simulator.log # Output log file for warnings and errors
-│
-├── tests/ # Unit and integration tests
-│ ├── __init__.py
-│ ├── test_robot.py # Tests for Robot movement and direction logic
-│ ├── test_navigation.py # Tests for grid boundaries and valid positions
-│ ├── test_controller.py # Tests for command parsing and control logic
-│ └── test_integration.py # End-to-end tests of command sequences
-│
-├── toy_robot/ # Core simulator logic
-│ ├── __init__.py
-│ ├── robot.py # Handles position, orientation, and movement
-│ ├── navigation.py # Validates grid boundaries and safe moves
-│ ├── controller.py # Parses and processes commands
-│ └── simulator.py # Feeds commands to the controller (from commands.txt)
-│
-├── main.py # Entry point: runs the simulator with command file
-├── .gitignore
-├── README.md
-└── requirements.txt
+toy_robot_simulator/  
+│  
+├── config/  
+│ ├── __init__.py  
+│ └── logging_config.py # Sets up logging format and handlers  
+│  
+├── data/  
+│ └── commands.txt # Input file containing list of commands  
+│  
+├── logs/  
+│ └── robot_simulator.log # Output log file for warnings and errors  
+│  
+├── tests/ # Unit and integration tests  
+│ ├── __init__.py  
+│ ├── test_robot.py # Tests for Robot movement and direction logic  
+│ ├── test_navigation.py # Tests for grid boundaries and valid positions  
+│ ├── test_controller.py # Tests for command parsing and control logic  
+│ └── test_integration.py # End-to-end tests of command sequences  
+│  
+├── toy_robot/ # Core simulator logic  
+│ ├── __init__.py  
+│ ├── robot.py # Handles position, orientation, and movement  
+│ ├── navigation.py # Validates grid boundaries and safe moves  
+│ ├── controller.py # Parses and processes commands  
+│ └── simulator.py # Feeds commands to the controller (from commands.txt)  
+│  
+├── main.py # Entry point: runs the simulator with command file  
+├── .gitignore  
+├── README.md  
+└── requirements.txt  
 
 ## Logging Behaviour  
 - All logs are saved to `logs/robot_simulator.log`.
@@ -133,30 +134,30 @@ toy_robot_simulator/
 ### 1. Clone the Repository  
 
 ```bash
-   git clone https://github.com/your-username/toy_robot_simulator.git
-   cd toy_robot_simulator
+git clone https://github.com/your-username/toy_robot_simulator.git
+cd toy_robot_simulator
 ```
 ### 2. Create a Virtual Environment (Recommended)  
 ```bash
-   python3 -m venv venv
-   source venv/bin/activate
+python3 -m venv venv
+source venv/bin/activate
 ```
 
 ### 3. Install Dependencies  
 ```bash
-   pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 ### 4. Run the Simulator  
 ```bash
-   python main.py
+python main.py
 ```
-This will read commands from data/commands.txt.
+By default, this reads from data/commands.txt  
 
 ### 5. Running Tests
 To run all unit and integration tests, run the following command from the project root directory:
 ```bash
-   pytest
+pytest
 ```
 
 ## Sample Commands and Expected Output
@@ -203,7 +204,7 @@ Warnings and invalid commands are automatically saved to logs/robot_simulator.lo
 2025-07-24 11:05:43,111 - RobotController - WARNING - Unsafe MOVE ignored: (-1,2WEST)
 ```
 
-## Example: Command Execution Flow
+## Execution Flow Explained
 Example commands that are processed:
 
 ```
@@ -228,8 +229,8 @@ Final command – `REPORT`:
    ```
       0,1,NORTH
    ```
-
-## Future improvements  
+  
+## Future improvements. 
 * Custom exception classes for better error handling.
 * Real-time message queue for microservice-style command input.
 * Dockerised execution environment.
