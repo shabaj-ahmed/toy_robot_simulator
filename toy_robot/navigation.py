@@ -18,17 +18,17 @@ class Navigation:
     within the boundaries of the tabletop grid.
     """
 
-    def __init__(self, grid_size=5):
+    def __init__(self, grid_size: int = 5) -> None:
         """
         Initialise the navigation system with a square grid of the specified size.
 
         Parameters:
         - grid_size (int): The dimension of the square grid (default: 5)
         """
-        self.grid_size = grid_size
+        self.grid_size: int = grid_size
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    def is_valid_position(self, x, y):
+    def is_valid_position(self, x: int, y: int) -> bool:
         """
         Check whether the given position (x, y) lies within the grid boundaries.
 

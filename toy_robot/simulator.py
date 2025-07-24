@@ -11,6 +11,7 @@ Responsibilities:
 """
 
 import logging
+from toy_robot.controller import RobotController
 
 class Simulator:
     """
@@ -18,7 +19,7 @@ class Simulator:
     execution to the provided RobotController instance.
     """
 
-    def __init__(self, controller):
+    def __init__(self, controller: RobotController) -> None:
         """
         Initialise the Simulator with a RobotController instance.
 
@@ -28,7 +29,7 @@ class Simulator:
         self.controller = controller
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    def run_from_default_file(self):
+    def run_from_default_file(self) -> None:
         """
         Reads commands from the default file ('data/commands.txt') line by line.
         Each non-empty line is sent to the controller for processing.

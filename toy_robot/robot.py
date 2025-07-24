@@ -13,6 +13,7 @@ Responsibilities:
 - Generate movement proposals without executing moves
 - Prints a formatted report of the robot’s position and direction
 """
+from typing import Optional, Tuple
 
 class Robot:
     """
@@ -35,16 +36,16 @@ class Robot:
         "WEST": (-1, 0)
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialise the robot. The robot is not placed on the table initially.
         """
-        self.current_x = None
-        self.current_y = None
-        self.current_direction = None
-        self.is_placed = False
+        self.current_x: Optional[int] = None
+        self.current_y: Optional[int] = None
+        self.current_direction: Optional[str] = None
+        self.is_placed: bool = False
 
-    def place(self, x, y, direction):
+    def place(self, x: int, y: int, direction: str) -> None:
         """
         Place the robot on the grid at a specific location and orientation.
 
@@ -58,7 +59,7 @@ class Robot:
         self.current_direction = direction
         self.is_placed = True
 
-    def propose_move(self):
+    def propose_move(self) -> Tuple[int, int, str]:
         """
         Propose the next position based on the current direction without changing state.
 
@@ -68,7 +69,7 @@ class Robot:
         dx, dy = self.GET_DIRECTION_DELTAS[self.current_direction]
         return self.current_x + dx, self.current_y + dy, self.current_direction
     
-    def update_position(self, new_x, new_y):
+    def update_position(self, new_x: int, new_y: int) -> None:
         """
         Update the robot’s position.
 
@@ -79,21 +80,21 @@ class Robot:
         self.current_x = new_x
         self.current_y = new_y
 
-    def turn_left(self):
+    def turn_left(self) -> None:
         """
         Rotate the robot 90° counter-clockwise.
         """
         idx = self.GET_CARDINAL_DIRECTIONS.index(self.current_direction)
         self.current_direction = self.GET_CARDINAL_DIRECTIONS[(idx - 1) % 4]
 
-    def turn_right(self):
+    def turn_right(self) -> None:
         """
         Rotate the robot 90 degrees clockwise.
         """
         idx = self.GET_CARDINAL_DIRECTIONS.index(self.current_direction)
         self.current_direction = self.GET_CARDINAL_DIRECTIONS[(idx + 1) % 4]
 
-    def report(self):
+    def report(self) -> None:
         """
         Print the robot's current position and direction in the format: X,Y,DIRECTION
         """

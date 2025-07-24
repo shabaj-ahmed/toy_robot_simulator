@@ -15,6 +15,8 @@ from toy_robot.robot import Robot
 from toy_robot.navigation import Navigation
 import logging
 
+from typing import Optional, Tuple, Union
+
 # Set of all supported commands
 VALID_COMMANDS = {"PLACE", "MOVE", "LEFT", "RIGHT", "REPORT"}
 
@@ -26,12 +28,12 @@ class RobotController:
     - LEFT/RIGHT/REPORT are ignored until robot is placed
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.robot = Robot()
         self.navigation = Navigation()
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    def process_command(self, command):
+    def process_command(self, command: str) -> None:
         """
         Processes a sequence of string commands in order.
 
@@ -84,7 +86,7 @@ class RobotController:
         elif cmd == "REPORT":
             self.robot.report()
 
-    def parse_command(self, command: str):
+    def parse_command(self, command: str) -> Optional[Union[Tuple[str], Tuple[str, int, int, str]]]:
         """
         Parses and validates a single command string.
 
