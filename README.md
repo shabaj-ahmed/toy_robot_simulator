@@ -1,29 +1,29 @@
 ## Table of Contents
 
-- [toy_robot_simulator](#toy_robot_simulator)
-- [Tabletop Grid and Coordinates](#tabletop-grid-and-coordinates)
-- [Supported Commands](#supported-commands)
-- [Constraints and Rules](#constraints-and-rules)
-- [Design Assumptions](#design-assumptions)
-- [Example Commands and Output](#example-commands-and-output)
-  - [Example A](#example-a)
-  - [Example B](#example-b)
-  - [Example C](#example-c)
-- [Project Structure](#project-structure)
-- [Logging Behaviour](#logging-behaviour)
-- [Setup Instructions](#setup-instructions)
-  - [1. Clone the Repository](#1-clone-the-repository)
-  - [2. Create a Virtual Environment (Recommended)](#2-create-a-virtual-environment-recommended)
-  - [3. Install Dependencies](#3-install-dependencies)
-  - [4. Run the Simulator](#4-run-the-simulator)
-  - [5. Running Tests](#5-running-tests)
-- [Sample Commands and Expected Output](#sample-commands-and-expected-output)
-  - [Sample commands.txt file](#sample-commandstxt-file)
-  - [Expected Console Output](#expected-console-output)
-  - [Expected Log Output](#expected-log-output)
-- [Execution Flow Explained](#execution-flow-explained)
-  - [Step-by-step Flow](#step-by-step-flow)
-- [Future Improvements](#future-improvements)
+- [toy\_robot\_simulator](#toy_robot_simulator)
+  - [Tabletop Grid and Coordinates](#tabletop-grid-and-coordinates)
+  - [Supported Commands](#supported-commands)
+  - [Constraints and Rules](#constraints-and-rules)
+  - [Design Assumptions](#design-assumptions)
+  - [Example Commands and Output](#example-commands-and-output)
+    - [Example A:](#example-a)
+    - [Example B](#example-b)
+    - [Example C](#example-c)
+  - [Project Structure](#project-structure)
+  - [Logging Behaviour](#logging-behaviour)
+  - [Setup Instructions](#setup-instructions)
+    - [1. Clone the Repository](#1-clone-the-repository)
+    - [2. Create a Virtual Environment (Recommended)](#2-create-a-virtual-environment-recommended)
+    - [3. Install Dependencies](#3-install-dependencies)
+    - [4. Run the Simulator](#4-run-the-simulator)
+    - [5. Running Tests](#5-running-tests)
+  - [Sample Commands and Expected Output](#sample-commands-and-expected-output)
+    - [Sample commands.txt file](#sample-commandstxt-file)
+    - [Expected Console Output](#expected-console-output)
+    - [Expected Log Output](#expected-log-output)
+  - [Execution Flow Explained](#execution-flow-explained)
+    - [Step-by-step Flow:](#step-by-step-flow)
+  - [Future improvements.](#future-improvements)
 
 # toy_robot_simulator 
 This is a simulation of a toy robot placed on a 5×5 tabletop grid using text-based commands. The robot can be placed at specific coordinates, rotated left or right, moved forward, and asked to report its position. Commands are read from a plain text file and processed in order.
@@ -82,6 +82,10 @@ REPORT
 ```
 -> Output: 3,3,NORTH
 
+*Diagram: Illustration of Example B sequence*
+
+![Example B Movement](https://github.com/shabaj-ahmed/toy_robot_simulator/tree/main/assets/example_b_diagram.png)
+
 ### Example C
 The initial PLACE is out of bounds. All subsequent commands are ignored.
 ```
@@ -99,6 +103,9 @@ REPORT
 ```
 toy_robot_simulator/ 
 │ 
+├── assets/ 
+│ └── example_b_diagram.png # An illustration stepping through an example 
+|
 ├── config/ 
 │ ├── __init__.py 
 │ └── logging_config.py # Sets up logging format and handlers 
@@ -122,7 +129,7 @@ toy_robot_simulator/
 │ ├── navigation.py # Validates grid boundaries and safe moves 
 │ ├── controller.py # Parses and processes commands 
 │ └── simulator.py # Feeds commands to the controller (from commands.txt) 
-│ 
+
 ├── main.py # Entry point: runs the simulator with data/commands.txt file 
 ├── .gitignore 
 ├── README.md 
