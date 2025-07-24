@@ -31,7 +31,7 @@ class RobotController:
         self.navigation = Navigation()
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    def process_commands(self, commands):
+    def process_command(self, command):
         """
         Processes a sequence of string commands in order.
 
@@ -44,46 +44,45 @@ class RobotController:
         - Commands are ignored if they are invalid or unsafe
         """
 
-        for command in commands:
-            parsed = self.parse_command(command)
-            if not parsed:
-                # Skip invalid commands
-                continue
+        parsed = self.parse_command(command)
+        if not parsed:
+            # Skip invalid commands
+            return
 
-            cmd = parsed[0]
+        cmd = parsed[0]
 
-            if cmd == "PLACE":
-                # Unpack arguments only if cmd is PLACE
-                _ , x, y, direction = parsed
+        if cmd == "PLACE":
+            # Unpack arguments only if cmd is PLACE
+            _ , x, y, direction = parsed
 
-                if not self.navigation.is_valid_position(x, y):
-                    self.logger.warning(f"PLACE ignored: invalid position ({x},{y},{direction})")
-                    continue
-                
-                self.robot.place(x, y, direction)
+            if not self.navigation.is_valid_position(x, y):
+                self.logger.warning(f"PLACE ignored: invalid position ({x},{y},{direction})")
+                return
+            
+            self.robot.place(x, y, direction)
 
-            elif not self.robot.is_placed:
-                self.logger.warning(f"Ignoring '{cmd}' as no PLACE command has been issued yet.")
-                continue
+        elif not self.robot.is_placed:
+            self.logger.warning(f"Ignoring '{cmd}' as no PLACE command has been issued yet.")
+            return
 
-            elif cmd == "MOVE":
-                # Ask robot what the next move would be
-                new_x, new_y, current_direction = self.robot.propose_move()
+        elif cmd == "MOVE":
+            # Ask robot what the next move would be
+            new_x, new_y, current_direction = self.robot.propose_move()
 
-                # Check if that move would be valid (on the table)
-                if self.navigation.is_valid_position(new_x, new_y):
-                    self.robot.update_position(new_x, new_y)
-                else:
-                    self.logger.warning(f"Unsafe MOVE ignored: ({new_x},{new_y}{current_direction})")
+            # Check if that move would be valid (on the table)
+            if self.navigation.is_valid_position(new_x, new_y):
+                self.robot.update_position(new_x, new_y)
+            else:
+                self.logger.warning(f"Unsafe MOVE ignored: ({new_x},{new_y}{current_direction})")
 
-            elif cmd == "LEFT":
-                self.robot.turn_left()
+        elif cmd == "LEFT":
+            self.robot.turn_left()
 
-            elif cmd == "RIGHT":
-                self.robot.turn_right()
+        elif cmd == "RIGHT":
+            self.robot.turn_right()
 
-            elif cmd == "REPORT":
-                self.robot.report()
+        elif cmd == "REPORT":
+            self.robot.report()
 
     def parse_command(self, command: str):
         """
