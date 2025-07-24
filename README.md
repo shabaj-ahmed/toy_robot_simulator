@@ -84,7 +84,7 @@ REPORT
 
 *Diagram: Illustration of Example B sequence*
 
-![Example B Movement](https://github.com/shabaj-ahmed/toy_robot_simulator/tree/main/assets/example_b_diagram.png)
+![Example B Movement](https://github.com/shabaj-ahmed/toy_robot_simulator/blob/main/assets/example_b_diagram.png)
 
 ### Example C
 The initial PLACE is out of bounds. All subsequent commands are ignored.
