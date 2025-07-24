@@ -97,4 +97,4 @@ class Robot:
         """
         Print the robot's current position and direction in the format: X,Y,DIRECTION
         """
-        print(f"{self.current_x},{self.current_y},{self.current_direction}")
+        print(f"Output: {self.current_x},{self.current_y},{self.current_direction}")
