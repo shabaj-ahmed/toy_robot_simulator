@@ -251,3 +251,4 @@ Final command – `REPORT`:
 * Real-time message queue for microservice-style command input.
 * Dockerised execution environment.
 * Create a project Wiki with interface details and architecture overview.
+* Shared Validation Utilities: Extract validation logic (e.g., command parsing and position checks) into a shared utility module. This would be useful for individual scripts or services to independently validate inputs and outputs, particularly in production environments with modular services running independently.
