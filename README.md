@@ -11,7 +11,7 @@
   - [Example C](#example-c)
 - [Project Structure](#project-structure)
 - [Logging Behaviour](#logging-behaviour)
-- [Setup Instructions](#setup-instructions)
+- [**Setup Instructions**](#setup-instructions)
   - [1. Clone the Repository](#1-clone-the-repository)
   - [2. Create a Virtual Environment (Recommended)](#2-create-a-virtual-environment-recommended)
   - [3. Install Dependencies](#3-install-dependencies)
