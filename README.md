@@ -124,7 +124,8 @@ toy_robot_simulator/
 │ └── test_integration.py # End-to-end tests of command sequences 
 │ 
 ├── toy_robot/ # Core simulator logic 
-│ ├── __init__.py 
+│ ├── __init__.py
+│ ├── interfaces.py # ABC interfaces (RobotInterface, NavigationInterface) to decouple components
 │ ├── robot.py # Handles position, orientation, and movement 
 │ ├── navigation.py # Validates grid boundaries and safe moves 
 │ ├── controller.py # Parses and processes commands 
