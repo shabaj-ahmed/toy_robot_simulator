@@ -14,10 +14,12 @@ Tests cover:
 
 import pytest
 from toy_robot.controller import RobotController
+from toy_robot.robot import Robot
+from toy_robot.navigation import Navigation
 
 class TestCommandSequences:
     def setup_method(self):
-        self.controller = RobotController()
+        self.controller = RobotController(robot=Robot(), navigation=Navigation())
 
     def test_standard_command_sequence(self, capsys):
         """

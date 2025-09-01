@@ -7,13 +7,15 @@ coordinates robot actions, and ensures safety logic is enforced (e.g., ignoring 
 
 import pytest
 from toy_robot.controller import RobotController
+from toy_robot.robot import Robot
+from toy_robot.navigation import Navigation
 
 class TestCommandValidation:
     def test_ignores_completely_invalid_commands(self, caplog):
         """
         Commands that are unrecognised or malformed should be ignored and logged as warnings.
         """
-        controller = RobotController()
+        controller = RobotController(robot=Robot(), navigation=Navigation())
         invalid_cmds = ["JUMP", "FLY", "PLACE2,3,EAST"]
         for cmd in invalid_cmds:
             controller.process_command(cmd)
@@ -23,7 +25,7 @@ class TestCommandValidation:
         """
         PLACE commands with invalid format (e.g., non-integer or missing fields) should trigger errors.
         """
-        controller = RobotController()
+        controller = RobotController(robot=Robot(), navigation=Navigation())
         controller.process_command("PLACE 1,A,EAST")
         assert "Invalid PLACE command format: PLACE 1,A,EAST - invalid literal for int() with base 10: 'A'" in caplog.text
 
@@ -31,7 +33,7 @@ class TestCommandValidation:
         """
         Commands must be uppercase — lowercase or mixed case commands are ignored.
         """
-        controller = RobotController()
+        controller = RobotController(robot=Robot(), navigation=Navigation())
         controller.process_command("place 0,0,NORTH")
         assert not controller.robot.is_placed
 
@@ -39,7 +41,7 @@ class TestCommandValidation:
         """
         PLACE commands with lowercase direction are considered invalid.
         """
-        controller = RobotController()
+        controller = RobotController(robot=Robot(), navigation=Navigation())
         controller.process_command("PLACE 0,0,north")
         assert not controller.robot.is_placed
 
@@ -47,7 +49,7 @@ class TestCommandValidation:
         """
         PLACE commands with out-of-bound coordinates are ignored and logged.
         """
-        controller = RobotController()
+        controller = RobotController(robot=Robot(), navigation=Navigation())
         controller.process_command("PLACE 5,6,EAST")
         assert "PLACE ignored: invalid position (5,6,EAST)" in caplog.text
 
@@ -56,7 +58,7 @@ class TestCommandExecution:
         """
         After a valid PLACE command, REPORT should output the correct position and direction.
         """
-        controller = RobotController()
+        controller = RobotController(robot=Robot(), navigation=Navigation())
         controller.process_command("PLACE 1,2,EAST")
         controller.process_command("REPORT")
         out = capsys.readouterr().out
@@ -66,7 +68,7 @@ class TestCommandExecution:
         """
         A MOVE that would push the robot off the grid should be ignored and logged.
         """
-        controller = RobotController()
+        controller = RobotController(robot=Robot(), navigation=Navigation())
         controller.process_command("PLACE 0,0,SOUTH")
         controller.process_command("MOVE")
         assert "Unsafe MOVE ignored" in caplog.text
@@ -75,6 +77,6 @@ class TestCommandExecution:
         """
         A MOVE command issued before any valid PLACE should be ignored and logged.
         """
-        controller = RobotController()
+        controller = RobotController(robot=Robot(), navigation=Navigation())
         controller.process_command("MOVE")
         assert "Ignoring 'MOVE' as no PLACE command has been issued yet." in caplog.text
