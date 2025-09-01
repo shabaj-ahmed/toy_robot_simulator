@@ -14,8 +14,9 @@ Responsibilities:
 - Prints a formatted report of the robot’s position and direction
 """
 from typing import Optional, Tuple
+from toy_robot.interfaces import RobotInterface
 
-class Robot:
+class Robot(RobotInterface):
     """
     The Robot class stores the robot's current position (x, y) and direction.
 

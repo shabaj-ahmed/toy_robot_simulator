@@ -10,9 +10,15 @@ Responsibilities:
 - Log any out-of-bounds validation attempts
 """
 
-import logging
+"""
+The navigation.py module checks proposed moves against the bounds of the 5×5 grid.
+If a move is out-of-bounds, it is rejected, and the robot’s internal state remains unchanged. 
+"""
 
-class Navigation:
+import logging
+from toy_robot.interfaces import NavigationInterface
+
+class Navigation(NavigationInterface):
     """
     The Navigation class provides utility methods to check whether a position is 
     within the boundaries of the tabletop grid.

@@ -10,6 +10,12 @@ Responsibilities:
 - Coordinate execution of valid commands
 - Enforce safety (e.g., prevent moving off the table)
 """
+"""
+This file defines the RobotController class, which is responsible for parsing and
+executing commands sent to the robot. It acts as the central logic coordinator, receiving
+raw command strings, validating them, and delegating execution to the Robot and Navigation
+classes.
+"""
 
 from toy_robot.robot import Robot
 from toy_robot.navigation import Navigation
@@ -44,6 +50,10 @@ class RobotController:
         - It is parsed and validated
         - If valid, it's executed based on robot state
         - Commands are ignored if they are invalid or unsafe
+
+        The process_command() method is the core entry point. It first parses the
+        command using parse_command(), which validates the format and returns either
+        a PLACE tuple or a one-word command like MOVE, LEFT, RIGHT, or REPORT.
         """
 
         parsed = self.parse_command(command)
@@ -54,6 +64,11 @@ class RobotController:
         cmd = parsed[0]
 
         if cmd == "PLACE":
+            """
+            If the command is PLACE, it unpacks the coordinates and direction, checks
+            the position is within bounds using the navigation module, and then places
+            the robot.
+            """
             # Unpack arguments only if cmd is PLACE
             _ , x, y, direction = parsed
 
@@ -68,6 +83,11 @@ class RobotController:
             return
 
         elif cmd == "MOVE":
+            """
+            For MOVE, it asks the robot to propose a new position, and then uses Navigation to
+            check whether that move would be safe before applying it. That separation helps keep
+            validation and state management modular.
+            """
             # Ask robot what the next move would be
             new_x, new_y, current_direction = self.robot.propose_move()
 
