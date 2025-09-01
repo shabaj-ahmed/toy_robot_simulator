@@ -153,7 +153,7 @@ cd toy_robot_simulator
 ### 2. Create a Virtual Environment (Recommended) 
 ```bash
 python3 -m venv venv
-source venv/bin/activate
+source .venv/bin/activate
 ```
 
 ### 3. Install Dependencies 
