@@ -5,13 +5,15 @@ This is the entry point of the Toy Robot Simulator. It passes a list of commands
 """
 
 from toy_robot.controller import RobotController
+from toy_robot.robot import Robot
+from toy_robot.navigation import Navigation
 from toy_robot.simulator import Simulator
 from config.logging_config import setup_logger
 
 setup_logger()
 
 if __name__ == "__main__":
-    controller = RobotController()
+    controller = RobotController(robot=Robot(), navigation=Navigation())
     simulator = Simulator(controller)
     simulator.run_from_default_file()
 

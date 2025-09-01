@@ -1,24 +1,18 @@
 """
 controller.py
 
-This file defines the RobotController class, which serves as the main interface 
-for processing user commands. It delegates robot control (position and direction) 
-to the Robot class, and validates movements using the Navigation class.
+This file defines the RobotController class, which is responsible for parsing and
+executing commands sent to the robot. It acts as the central logic coordinator, receiving
+raw command strings, validating them, and delegating execution to the Robot and Navigation
+classes.
 
 Responsibilities:
 - Parse and validate incoming commands
 - Coordinate execution of valid commands
 - Enforce safety (e.g., prevent moving off the table)
 """
-"""
-This file defines the RobotController class, which is responsible for parsing and
-executing commands sent to the robot. It acts as the central logic coordinator, receiving
-raw command strings, validating them, and delegating execution to the Robot and Navigation
-classes.
-"""
 
-from toy_robot.robot import Robot
-from toy_robot.navigation import Navigation
+from toy_robot.interfaces import RobotInterface, NavigationInterface
 import logging
 
 from typing import Optional, Tuple, Union
@@ -34,9 +28,9 @@ class RobotController:
     - LEFT/RIGHT/REPORT are ignored until robot is placed
     """
 
-    def __init__(self) -> None:
-        self.robot = Robot()
-        self.navigation = Navigation()
+    def __init__(self, robot: RobotInterface, navigation: NavigationInterface) -> None:
+        self.robot = robot
+        self.navigation = navigation
         self.logger = logging.getLogger(self.__class__.__name__)
 
     def process_command(self, command: str) -> None:
@@ -139,7 +133,7 @@ class RobotController:
                 x, y = int(x_str), int(y_str) # Throws ValueError if not integers
                 direction = direction.strip()
                 
-                if direction not in Robot.GET_CARDINAL_DIRECTIONS:
+                if direction not in RobotInterface.GET_CARDINAL_DIRECTIONS:
                     raise ValueError("Invalid direction.")
                     
                 return ("PLACE", x, y, direction)

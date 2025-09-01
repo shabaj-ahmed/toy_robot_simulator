@@ -13,6 +13,7 @@ Responsibilities:
 - Generate movement proposals without executing moves
 - Prints a formatted report of the robot’s position and direction
 """
+
 from typing import Optional, Tuple
 from toy_robot.interfaces import RobotInterface
 
@@ -27,15 +28,6 @@ class Robot(RobotInterface):
     - Executes a move when requested to update position
     - Prints a report to the console of the current position and direction
     """
-
-    # Constants for cardinal directions
-    GET_CARDINAL_DIRECTIONS = ["NORTH", "EAST", "SOUTH", "WEST"]
-    GET_DIRECTION_DELTAS = {
-        "NORTH": (0, 1),
-        "EAST": (1, 0),
-        "SOUTH": (0, -1),
-        "WEST": (-1, 0)
-    }
 
     def __init__(self) -> None:
         """

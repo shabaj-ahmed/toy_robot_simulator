@@ -1,5 +1,5 @@
 """
-toy_robot/interface.py
+toy_robot/interfaces.py
 
 This file defines interfaces for the Robot and Navigation classes to ensure
 consistent method signatures and promote modularity.
@@ -18,6 +18,16 @@ class RobotInterface(ABC):
     """
     The RobotInterface defines the essential methods that any Robot class must implement.
     """
+    
+    # Constants for cardinal directions
+    GET_CARDINAL_DIRECTIONS = ["NORTH", "EAST", "SOUTH", "WEST"]
+    GET_DIRECTION_DELTAS = {
+        "NORTH": (0, 1),
+        "EAST": (1, 0),
+        "SOUTH": (0, -1),
+        "WEST": (-1, 0)
+    }
+
     @abstractmethod
     def place(self, x: int, y: int, direction: str) -> None: ...
     @abstractmethod
