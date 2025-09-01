@@ -1,18 +1,13 @@
 """
 navigation.py
 
-This file defines the Navigation class, which is responsible for validating whether 
-a given (x, y) position is within the bounds of the tabletop grid.
+The navigation.py module checks proposed moves against the bounds of the 5×5 grid.
+If a move is out-of-bounds, it is rejected, and the robot’s internal state remains unchanged. 
 
 Responsibilities:
 - Enforce grid boundaries
 - Prevent unsafe movement off the table
 - Log any out-of-bounds validation attempts
-"""
-
-"""
-The navigation.py module checks proposed moves against the bounds of the 5×5 grid.
-If a move is out-of-bounds, it is rejected, and the robot’s internal state remains unchanged. 
 """
 
 import logging
