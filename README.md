@@ -148,7 +148,7 @@ toy_robot_simulator/
 ### 1. Clone the Repository 
 
 ```bash
-git clone https://github.com/your-username/toy_robot_simulator.git
+git clone https://github.com/shabaj-ahmed/toy_robot_simulator.git
 cd toy_robot_simulator
 ```
 ### 2. Create a Virtual Environment (Recommended) 
